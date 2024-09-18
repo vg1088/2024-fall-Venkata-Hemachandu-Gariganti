@@ -1,5 +1,10 @@
 # masters_prject_chandu_fuldev "The project going on full stack development with devops"
 
+## docker:
+
+- command to install docker "sudo apt-get install docker-ce docker-ce-cli containerd.io"
+- docker run -p 8080:8080 <image_name>
+
 ## kubernetes and kubectl download guide.
 ### this is for linux X86-64 that i am using now
 - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
