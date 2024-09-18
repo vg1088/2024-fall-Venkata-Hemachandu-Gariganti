@@ -1,0 +1,47 @@
+<!-- shopping/templates/welcome.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 1em;
+            background-color: #333;
+            color: white;
+        }
+        .logout-link {
+            color: rgb(300, 300, 300);
+            text-decoration: none;
+            padding: 1.0em 1em;
+            background-color: #e62e3d;
+            border-radius: 1em;
+        }
+        .logout-link:hover {
+            background-color: #ea0a0a;
+        }
+        .content {
+            margin: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Welcome to chandu's Mart</h2>
+        <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+    </div>
+    <div class="content">
+        <h3>Products</h3>
+        <ul>
+            {% for product in products %}
+                <li>{{ product.name }} : ${{ product.price }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
