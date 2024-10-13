@@ -14,7 +14,7 @@
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 - sudo apt-get update
 - sudo apt-get install jenkins
-
+- for chnaging the port we need to modify in 2 files one is from jenkins(.../etc/default/jenkins) and another in service file need to change the port in this project the jenkins running on 8085 port
 ## kubernetes and kubectl download guide.
 ### this is for linux X86-64 that i am using now
 - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
