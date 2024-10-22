@@ -16,4 +16,4 @@ spec:
       - name: django-container
         image: chandu0108/chandu-devops-1:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
