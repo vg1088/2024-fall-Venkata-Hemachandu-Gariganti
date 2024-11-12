@@ -1,31 +1,30 @@
 pipeline {
-
   environment {
     dockerimagename = "chandu0108/chandu-devops-1"
     dockerImage = ""
+    KUBECONFIG = "/home/handu/.minikube/config"  // Ensure this path is accessible by Jenkins
   }
 
   agent any
 
   stages {
-
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/master-projects-theses/2024-fall-Venkata-Hemachandu-Gariganti.git'
+        git credentialsId: 'github', url: 'https://github.com/master-projects-theses/2024-fall-Venkata-Hemachandu-Gariganti.git', branch: 'main'
       }
     }
 
-    stage('Build image') {
+    stage('Build Image') {
       steps {
         script {
-          dockerImage = docker.build dockerimagename
+          dockerImage = docker.build(dockerimagename)
         }
       }
     }
 
-    stage('Pushing Image') {
+    stage('Push Image') {
       environment {
-        registryCredential = 'dockerhublogin' // Ensure this matches your Docker Hub credential ID in Jenkins
+        registryCredential = 'dockerhublogin'
       }
       steps {
         script {
@@ -36,16 +35,17 @@ pipeline {
       }
     }
 
-    stage('Deploying App to Kubernetes') {
+    stage('Deploy App to Kubernetes') {
       steps {
-        withKubeConfig([credentialsId: 'kubernetes']) { // Replace 'kubernetes' with the ID of your uploaded secret file
+        withKubeConfig([credentialsId: 'kubernetes']) {
           script {
-            sh 'kubectl apply -f deployment.yml'
+            // Remove permission adjustment commands if not required
+            // Ensure Jenkins has appropriate permissions to access kubeconfig and certificate files directly
+            sh 'kubectl apply -f deployment.yaml'
           }
         }
       }
     }
-
   }
 
   post {
@@ -56,6 +56,4 @@ pipeline {
       echo 'Pipeline failed.'
     }
   }
-
 }
-
