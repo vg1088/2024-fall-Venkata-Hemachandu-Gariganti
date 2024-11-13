@@ -17,6 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . /app/
 
+# Set the working directory to where manage.py is located
+WORKDIR /app/shoppingweb
+
 # Expose the port that Django will run on
 EXPOSE 8080
 
