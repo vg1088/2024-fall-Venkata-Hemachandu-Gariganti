@@ -41,7 +41,10 @@ pipeline {
           script {
             // Remove permission adjustment commands if not required
             // Ensure Jenkins has appropriate permissions to access kubeconfig and certificate files directly
-            sh 'kubectl apply -f deployment.yaml'
+            sh """
+            kubectl set image deployment/django-app-deployment django-container=${dockerimagename}:${env.BUILD_ID}
+            kubectl apply -f deployment.yaml
+            """
           }
         }
       }
@@ -57,3 +60,4 @@ pipeline {
     }
   }
 }
+
