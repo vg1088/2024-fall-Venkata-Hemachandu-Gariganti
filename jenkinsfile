@@ -2,7 +2,7 @@ pipeline {
   environment {
     dockerimagename = "chandu0108/chandu-devops-1"
     dockerImage = ""
-    KUBECONFIG = "/home/handu/.minikube/config"  // Ensure this path is accessible by Jenkins
+    KUBECONFIG = "/home/handu/.minikube/config"
   }
 
   agent any
@@ -17,7 +17,7 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          dockerImage = docker.build(dockerimagename)
+          dockerImage = docker.build("${dockerimagename}:${env.BUILD_ID}")
         }
       }
     }
@@ -29,6 +29,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+            dockerImage.push("${env.BUILD_ID}")
             dockerImage.push("latest")
           }
         }
@@ -39,11 +40,9 @@ pipeline {
       steps {
         withKubeConfig([credentialsId: 'kubernetes']) {
           script {
-            // Remove permission adjustment commands if not required
-            // Ensure Jenkins has appropriate permissions to access kubeconfig and certificate files directly
             sh """
-            kubectl set image deployment/django-app-deployment django-container=${dockerimagename}:${env.BUILD_ID}
-            kubectl apply -f deployment.yaml
+            kubectl set image deployment/django-app-deployment django-container=${dockerimagename}:${env.BUILD_ID} --record
+            kubectl rollout status deployment/django-app-deployment
             """
           }
         }
